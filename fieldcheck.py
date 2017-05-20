@@ -2,7 +2,6 @@
 
 from netmiko import ConnectHandler
 import xmltodict
-import pprint
 import json
 import sys
 import subprocess
