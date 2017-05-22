@@ -8,6 +8,7 @@ import subprocess
 import os
 import argparse
 
+
 class FieldTester(object):
 
   __version__ = "0.9"
@@ -17,6 +18,7 @@ class FieldTester(object):
     self.username = username
     self.keyfile = keyfile
     self.handler = False
+
   def connect(self, pass_exceptions=False):
     test_device = {
       'device_type': 'juniper_junos',
@@ -30,7 +32,7 @@ class FieldTester(object):
     else:
       try:
         handler = ConnectHandler(**test_device)
-      except: # get possible exceptions
+      except:  # get possible exceptions
         print("Error: ", sys.exc_info()[0])
         raise
 
@@ -38,7 +40,9 @@ class FieldTester(object):
 
   def test_ping(self):
     try:
-      response = subprocess.call(["ping", "-c1", self.ip], stdout=open(os.devnull, 'wb'))
+      response = subprocess.call(
+        ["ping", "-c1", self.ip], stdout=open(os.devnull, 'wb')
+      )
       return True
     except subprocess.CalledProcessError:
       return False
@@ -68,7 +72,6 @@ class FieldTester(object):
       return True
     else:
       return False
-
 
   def get_output(self, command):
     if self.handler:
@@ -154,17 +157,17 @@ class FieldTester(object):
     return json.dumps(output, indent=4)
 
 
-
-
-
-
-
 if __name__ == '__main__':
 
   # Load arguments
   parser = argparse.ArgumentParser()
-  parser.add_argument('-u', '--username', action="store", dest="username", help="SSH Username")
-  parser.add_argument('-k', '--keyfile', action="store", dest="keyfile", help="SSH Private Key file")
+  parser.add_argument(
+    '-u', '--username', action="store", dest="username", help="SSH Username"
+  )
+  parser.add_argument(
+    '-k', '--keyfile', action="store",
+    dest="keyfile", help="SSH Private Key file"
+  )
   parser.add_argument('node', nargs=1, help="IP or hostname to check")
   args = parser.parse_args()
 
@@ -172,7 +175,5 @@ if __name__ == '__main__':
     parser.print_help()
     sys.exit()
 
-
   ft = FieldTester(args.username, args.keyfile, args.node.pop())
-#  ft = FieldTester("automation", "/Users/eising/.ssh/automation-test-key", "192.168.30.200")
   print(ft.run_tests())
