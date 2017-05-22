@@ -1,0 +1,40 @@
+#+TITLE: Fieldcheck
+
+* Usage
+Fieldcheck -u =username= -k =path/to/ssh_key= =device=
+
+Runs the following checks on a Juniper EX device:
+
+- ICMP: Is the device pingable
+- SSH: Can the device be logged in to?
+- OSPF: Does the device have at least two OSPF neighbors formed over different interfaces in any OSPF instance?
+- Routing table: Does the device have at least one default route in any routing table
+
+The device runs these tests and returns a JSON object.
+
+#+BEGIN_SRC
+
+{
+    "tests": [
+        {
+            "result": "OK",
+            "test_name": "Ping test"
+        },
+        {
+            "result": "OK",
+            "test_name": "SSH Connectivity test"
+        },
+        {
+            "info": "Found 1 OSPF neighbor. Requires 2 or more to pass test",
+            "result": "Partial",
+            "test_name": "OSPF Neighbor test"
+        },
+        {
+            "result": "OK",
+            "test_name": "Default route test"
+        }
+    ],
+}
+
+
+#+END_SRC
